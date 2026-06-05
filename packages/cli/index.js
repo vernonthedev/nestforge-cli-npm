@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+const path = require('path');
 const { platform, arch } = process;
 
 const PLATFORM_PACKAGES = {
@@ -20,5 +21,15 @@ const binaryName = BINARY_NAMES[platformKey];
 
 if (!pkgName || !binaryName) {
   console.error(`Unsupported platform: ${platform} ${arch}`);
+  process.exit(1);
+}
+
+let binaryPath;
+try {
+  const pkgJsonPath = require.resolve(`${pkgName}/package.json`);
+  const pkgDir = path.dirname(pkgJsonPath);
+  binaryPath = path.join(pkgDir, binaryName);
+} catch (err) {
+  console.error(`Failed to resolve binary for ${platform} ${arch}: ${err.message}`);
   process.exit(1);
 }
