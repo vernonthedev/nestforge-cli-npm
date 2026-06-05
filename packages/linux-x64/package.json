@@ -6,7 +6,7 @@
   "cpu": ["x64"],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vernonthedev/nestforge-cli.git"
+    "url": "git+https://github.com/vernonthedev/nestforge-cli-npm.git"
   },
   "files": [
     "nestforge-linux-x64"
