@@ -13,7 +13,58 @@ permissions:
   packages: read
 
 jobs:
+  build-darwin-arm64:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: vernonthedev/nestforge
+          ref: v${{ github.event.inputs.version }}
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-apple-darwin
+      - uses: Swatinem/rust-cache@v2
+      - run: cargo build --release --package nestforge-cli --target aarch64-apple-darwin
+      - run: cp target/aarch64-apple-darwin/release/nestforge nestforge-darwin-arm64
+      - uses: actions/upload-artifact@v4
+        with:
+          name: nestforge-darwin-arm64
+          path: nestforge-darwin-arm64
+
+  build-linux-x64:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: vernonthedev/nestforge
+          ref: v${{ github.event.inputs.version }}
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - run: cargo build --release --package nestforge-cli
+      - run: cp target/release/nestforge nestforge-linux-x64
+      - uses: actions/upload-artifact@v4
+        with:
+          name: nestforge-linux-x64
+          path: nestforge-linux-x64
+
+  build-win32-x64:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: vernonthedev/nestforge
+          ref: v${{ github.event.inputs.version }}
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - run: cargo build --release --package nestforge-cli
+      - run: copy target\release\nestforge.exe nestforge-win32-x64.exe
+      - uses: actions/upload-artifact@v4
+        with:
+          name: nestforge-win32-x64
+          path: nestforge-win32-x64.exe
+
   release:
+    needs: [build-darwin-arm64, build-linux-x64, build-win32-x64]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -21,6 +72,7 @@ jobs:
         with:
           node-version: 20
           registry-url: 'https://registry.npmjs.org'
+      - uses: actions/download-artifact@v4
       - name: Bump versions across all workspaces
         run: |
           VERSION="${{ github.event.inputs.version }}"
@@ -31,20 +83,11 @@ jobs:
           npm pkg set "optionalDependencies.@nestforge/cli-darwin-arm64=$VERSION" --workspace packages/cli
           npm pkg set "optionalDependencies.@nestforge/cli-linux-x64=$VERSION" --workspace packages/cli
           npm pkg set "optionalDependencies.@nestforge/cli-win32-x64=$VERSION" --workspace packages/cli
-      - name: Download compiled binaries from upstream
-        run: |
-          VERSION="${{ github.event.inputs.version }}"
-          mkdir -p /tmp/nestforge-binaries
-          gh release download "v$VERSION" \
-            --repo vernonthedev/nestforge \
-            --dir /tmp/nestforge-binaries
-        env:
-          GH_TOKEN: ${{ github.token }}
       - name: Place binaries into platform package directories
         run: |
-          cp /tmp/nestforge-binaries/nestforge-darwin-arm64 packages/darwin-arm64/nestforge-darwin-arm64
-          cp /tmp/nestforge-binaries/nestforge-linux-x64 packages/linux-x64/nestforge-linux-x64
-          cp /tmp/nestforge-binaries/nestforge-win32-x64.exe packages/win32-x64/nestforge-win32-x64.exe
+          cp nestforge-darwin-arm64/nestforge-darwin-arm64 packages/darwin-arm64/nestforge-darwin-arm64
+          cp nestforge-linux-x64/nestforge-linux-x64 packages/linux-x64/nestforge-linux-x64
+          cp nestforge-win32-x64/nestforge-win32-x64.exe packages/win32-x64/nestforge-win32-x64.exe
       - name: Set executable permissions on Unix binaries
         run: |
           chmod +x packages/darwin-arm64/nestforge-darwin-arm64
