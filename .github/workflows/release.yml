@@ -1,25 +1,46 @@
-name: Release
+name: Automated Package Release
 
 on:
+  push:
+    branches: [master]
   workflow_dispatch:
-    inputs:
-      version:
-        description: 'Release version (e.g. 1.2.3)'
-        required: true
-        type: string
 
 permissions:
   contents: read
   packages: read
 
 jobs:
+  get-version:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.extract.outputs.version }}
+      is_release: ${{ steps.extract.outputs.is_release }}
+    steps:
+      - id: extract
+        shell: bash
+        run: |
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            echo "is_release=true" >> "$GITHUB_OUTPUT"
+            echo "version=${{ github.event.inputs.version }}" >> "$GITHUB_OUTPUT"
+          else
+            MSG=$(jq -r '.head_commit.message' "$GITHUB_EVENT_PATH")
+            if [[ "$MSG" =~ ^release:\ \{([0-9]+\.[0-9]+\.[0-9]+)\} ]]; then
+              echo "is_release=true" >> "$GITHUB_OUTPUT"
+              echo "version=${BASH_REMATCH[1]}" >> "$GITHUB_OUTPUT"
+            else
+              echo "is_release=false" >> "$GITHUB_OUTPUT"
+            fi
+          fi
+
   build-darwin-arm64:
+    needs: get-version
+    if: needs.get-version.outputs.is_release == 'true'
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
         with:
           repository: vernonthedev/nestforge
-          ref: v${{ github.event.inputs.version }}
+          ref: v${{ needs.get-version.outputs.version }}
       - uses: dtolnay/rust-toolchain@stable
         with:
           targets: aarch64-apple-darwin
@@ -32,12 +53,14 @@ jobs:
           path: nestforge-darwin-arm64
 
   build-linux-x64:
+    needs: get-version
+    if: needs.get-version.outputs.is_release == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
           repository: vernonthedev/nestforge
-          ref: v${{ github.event.inputs.version }}
+          ref: v${{ needs.get-version.outputs.version }}
       - uses: dtolnay/rust-toolchain@stable
       - uses: Swatinem/rust-cache@v2
       - run: cargo build --release --package nestforge-cli
@@ -48,12 +71,14 @@ jobs:
           path: nestforge-linux-x64
 
   build-win32-x64:
+    needs: get-version
+    if: needs.get-version.outputs.is_release == 'true'
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
         with:
           repository: vernonthedev/nestforge
-          ref: v${{ github.event.inputs.version }}
+          ref: v${{ needs.get-version.outputs.version }}
       - uses: dtolnay/rust-toolchain@stable
       - uses: Swatinem/rust-cache@v2
       - run: cargo build --release --package nestforge-cli
@@ -64,7 +89,8 @@ jobs:
           path: nestforge-win32-x64.exe
 
   release:
-    needs: [build-darwin-arm64, build-linux-x64, build-win32-x64]
+    needs: [get-version, build-darwin-arm64, build-linux-x64, build-win32-x64]
+    if: needs.get-version.outputs.is_release == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -75,7 +101,7 @@ jobs:
       - uses: actions/download-artifact@v4
       - name: Bump versions across all workspaces
         run: |
-          VERSION="${{ github.event.inputs.version }}"
+          VERSION="${{ needs.get-version.outputs.version }}"
           npm pkg set version="$VERSION" --workspace packages/cli
           npm pkg set version="$VERSION" --workspace packages/darwin-arm64
           npm pkg set version="$VERSION" --workspace packages/linux-x64
