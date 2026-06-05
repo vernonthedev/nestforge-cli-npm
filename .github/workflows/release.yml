@@ -41,3 +41,7 @@ jobs:
           cp /tmp/nestforge-binaries/nestforge-darwin-arm64 packages/darwin-arm64/nestforge-darwin-arm64
           cp /tmp/nestforge-binaries/nestforge-linux-x64 packages/linux-x64/nestforge-linux-x64
           cp /tmp/nestforge-binaries/nestforge-win32-x64.exe packages/win32-x64/nestforge-win32-x64.exe
+      - name: Set executable permissions on Unix binaries
+        run: |
+          chmod +x packages/darwin-arm64/nestforge-darwin-arm64
+          chmod +x packages/linux-x64/nestforge-linux-x64
