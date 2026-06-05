@@ -37,3 +37,6 @@ try {
 
 const args = process.argv.slice(2);
 const child = spawn(binaryPath, args, { stdio: 'inherit' });
+
+process.on('SIGINT', () => { child.kill('SIGINT'); });
+process.on('SIGTERM', () => { child.kill('SIGTERM'); });
