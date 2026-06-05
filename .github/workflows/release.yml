@@ -35,15 +35,32 @@ jobs:
             fi
           fi
 
-  build-darwin-arm64:
+  get-upstream-tag:
     needs: get-version
+    if: needs.get-version.outputs.is_release == 'true'
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.latest.outputs.tag }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: vernonthedev/nestforge
+          fetch-depth: 0
+      - id: latest
+        run: |
+          TAG=$(git tag --sort=-v:refname | head -1)
+          if [[ -z "$TAG" ]]; then TAG="main"; fi
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+
+  build-darwin-arm64:
+    needs: [get-version, get-upstream-tag]
     if: needs.get-version.outputs.is_release == 'true'
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
         with:
           repository: vernonthedev/nestforge
-          ref: v${{ needs.get-version.outputs.version }}
+          ref: ${{ needs.get-upstream-tag.outputs.tag }}
       - uses: dtolnay/rust-toolchain@stable
         with:
           targets: aarch64-apple-darwin
@@ -56,14 +73,14 @@ jobs:
           path: nestforge-darwin-arm64
 
   build-linux-x64:
-    needs: get-version
+    needs: [get-version, get-upstream-tag]
     if: needs.get-version.outputs.is_release == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
           repository: vernonthedev/nestforge
-          ref: v${{ needs.get-version.outputs.version }}
+          ref: ${{ needs.get-upstream-tag.outputs.tag }}
       - uses: dtolnay/rust-toolchain@stable
       - uses: Swatinem/rust-cache@v2
       - run: cargo build --release --package nestforge-cli
@@ -74,14 +91,14 @@ jobs:
           path: nestforge-linux-x64
 
   build-win32-x64:
-    needs: get-version
+    needs: [get-version, get-upstream-tag]
     if: needs.get-version.outputs.is_release == 'true'
     runs-on: windows-2022
     steps:
       - uses: actions/checkout@v4
         with:
           repository: vernonthedev/nestforge
-          ref: v${{ needs.get-version.outputs.version }}
+          ref: ${{ needs.get-upstream-tag.outputs.tag }}
       - uses: dtolnay/rust-toolchain@stable
       - uses: Swatinem/rust-cache@v2
       - run: cargo build --release --package nestforge-cli
@@ -92,7 +109,7 @@ jobs:
           path: nestforge-win32-x64.exe
 
   release:
-    needs: [get-version, build-darwin-arm64, build-linux-x64, build-win32-x64]
+    needs: [get-version, get-upstream-tag, build-darwin-arm64, build-linux-x64, build-win32-x64]
     if: needs.get-version.outputs.is_release == 'true'
     runs-on: ubuntu-latest
     steps:
