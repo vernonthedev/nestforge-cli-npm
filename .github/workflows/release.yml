@@ -27,3 +27,12 @@ jobs:
           npm pkg set "optionalDependencies.@nestforge/cli-darwin-arm64=$VERSION" --workspace packages/cli
           npm pkg set "optionalDependencies.@nestforge/cli-linux-x64=$VERSION" --workspace packages/cli
           npm pkg set "optionalDependencies.@nestforge/cli-win32-x64=$VERSION" --workspace packages/cli
+      - name: Download compiled binaries from upstream
+        run: |
+          VERSION="${{ github.event.inputs.version }}"
+          mkdir -p /tmp/nestforge-binaries
+          gh release download "v$VERSION" \
+            --repo vernonthedev/nestforge \
+            --dir /tmp/nestforge-binaries
+        env:
+          GH_TOKEN: ${{ github.token }}
