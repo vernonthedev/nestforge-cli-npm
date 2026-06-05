@@ -7,5 +7,9 @@
     "type": "git",
     "url": "git+https://github.com/vernonthedev/nestforge-cli-npm.git"
   },
+  "scripts": {
+    "verify": "node scripts/verify-workspace.js",
+    "test": "node packages/cli/test/index.test.js"
+  },
   "license": "MIT"
 }
