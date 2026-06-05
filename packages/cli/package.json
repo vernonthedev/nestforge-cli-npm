@@ -1,5 +1,5 @@
 {
-  "name": "nestforge",
+  "name": "nestforge-cli",
   "version": "0.1.0",
   "description": "NestForge CLI - Rust framework command-line tool",
   "bin": {
@@ -17,8 +17,8 @@
     "node": ">=18.0.0"
   },
   "optionalDependencies": {
-    "@nestforge/cli-darwin-arm64": "0.1.0",
-    "@nestforge/cli-linux-x64": "0.1.0",
-    "@nestforge/cli-win32-x64": "0.1.0"
+    "@vernonthedev/cli-darwin-arm64": "0.1.0",
+    "@vernonthedev/cli-linux-x64": "0.1.0",
+    "@vernonthedev/cli-win32-x64": "0.1.0"
   }
 }

@@ -1,5 +1,5 @@
 {
-  "name": "@nestforge/cli-darwin-arm64",
+  "name": "@vernonthedev/cli-darwin-arm64",
   "version": "0.1.0",
   "description": "NestForge CLI binary for macOS ARM64 (Apple Silicon)",
   "os": ["darwin"],

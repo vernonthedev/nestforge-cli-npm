@@ -7,7 +7,7 @@ The official NPM distribution for the [NestForge](https://github.com/vernonthede
 ## Installation
 
 ```bash
-npm install -g nestforge
+npm install -g nestforge-cli
 ```
 
 ## Usage
@@ -22,9 +22,9 @@ nestforge g module users
 
 | Package | OS | Architecture |
 |---------|----|-------------|
-| `@nestforge/cli-darwin-arm64` | macOS | ARM64 (Apple Silicon) |
-| `@nestforge/cli-linux-x64` | Linux | x86_64 |
-| `@nestforge/cli-win32-x64` | Windows | x86_64 |
+| `@vernonthedev/cli-darwin-arm64` | macOS | ARM64 (Apple Silicon) |
+| `@vernonthedev/cli-linux-x64` | Linux | x86_64 |
+| `@vernonthedev/cli-win32-x64` | Windows | x86_64 |
 
 The correct platform package is selected automatically at install time via `optionalDependencies`.
 

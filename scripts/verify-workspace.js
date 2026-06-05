@@ -2,10 +2,10 @@ const fs = require('fs');
 const path = require('path');
 
 const packages = {
-  cli: { path: 'packages/cli/package.json', name: 'nestforge' },
-  darwin: { path: 'packages/darwin-arm64/package.json', name: '@nestforge/cli-darwin-arm64' },
-  linux: { path: 'packages/linux-x64/package.json', name: '@nestforge/cli-linux-x64' },
-  win32: { path: 'packages/win32-x64/package.json', name: '@nestforge/cli-win32-x64' },
+  cli: { path: 'packages/cli/package.json', name: 'nestforge-cli' },
+  darwin: { path: 'packages/darwin-arm64/package.json', name: '@vernonthedev/cli-darwin-arm64' },
+  linux: { path: 'packages/linux-x64/package.json', name: '@vernonthedev/cli-linux-x64' },
+  win32: { path: 'packages/win32-x64/package.json', name: '@vernonthedev/cli-win32-x64' },
 };
 
 function loadJson(filePath) {

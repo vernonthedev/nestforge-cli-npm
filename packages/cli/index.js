@@ -5,9 +5,9 @@ const { spawn } = require('child_process');
 const { platform, arch } = process;
 
 const PLATFORM_PACKAGES = {
-  'darwin-arm64': '@nestforge/cli-darwin-arm64',
-  'linux-x64': '@nestforge/cli-linux-x64',
-  'win32-x64': '@nestforge/cli-win32-x64',
+  'darwin-arm64': '@vernonthedev/cli-darwin-arm64',
+  'linux-x64': '@vernonthedev/cli-linux-x64',
+  'win32-x64': '@vernonthedev/cli-win32-x64',
 };
 
 const BINARY_NAMES = {

@@ -1,9 +1,9 @@
 const assert = require('assert');
 
 const PLATFORM_PACKAGES = {
-  'darwin-arm64': '@nestforge/cli-darwin-arm64',
-  'linux-x64': '@nestforge/cli-linux-x64',
-  'win32-x64': '@nestforge/cli-win32-x64',
+  'darwin-arm64': '@vernonthedev/cli-darwin-arm64',
+  'linux-x64': '@vernonthedev/cli-linux-x64',
+  'win32-x64': '@vernonthedev/cli-win32-x64',
 };
 
 const BINARY_NAMES = {
@@ -14,9 +14,9 @@ const BINARY_NAMES = {
 
 function testPlatforms() {
   const platforms = [
-    { key: 'darwin-arm64', pkg: '@nestforge/cli-darwin-arm64', bin: 'nestforge-darwin-arm64' },
-    { key: 'linux-x64', pkg: '@nestforge/cli-linux-x64', bin: 'nestforge-linux-x64' },
-    { key: 'win32-x64', pkg: '@nestforge/cli-win32-x64', bin: 'nestforge-win32-x64.exe' },
+    { key: 'darwin-arm64', pkg: '@vernonthedev/cli-darwin-arm64', bin: 'nestforge-darwin-arm64' },
+    { key: 'linux-x64', pkg: '@vernonthedev/cli-linux-x64', bin: 'nestforge-linux-x64' },
+    { key: 'win32-x64', pkg: '@vernonthedev/cli-win32-x64', bin: 'nestforge-win32-x64.exe' },
   ];
 
   for (const plat of platforms) {

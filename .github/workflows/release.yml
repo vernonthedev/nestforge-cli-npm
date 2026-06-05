@@ -106,9 +106,9 @@ jobs:
           npm pkg set version="$VERSION" --workspace packages/darwin-arm64
           npm pkg set version="$VERSION" --workspace packages/linux-x64
           npm pkg set version="$VERSION" --workspace packages/win32-x64
-          npm pkg set "optionalDependencies.@nestforge/cli-darwin-arm64=$VERSION" --workspace packages/cli
-          npm pkg set "optionalDependencies.@nestforge/cli-linux-x64=$VERSION" --workspace packages/cli
-          npm pkg set "optionalDependencies.@nestforge/cli-win32-x64=$VERSION" --workspace packages/cli
+          npm pkg set "optionalDependencies.@vernonthedev/cli-darwin-arm64=$VERSION" --workspace packages/cli
+          npm pkg set "optionalDependencies.@vernonthedev/cli-linux-x64=$VERSION" --workspace packages/cli
+          npm pkg set "optionalDependencies.@vernonthedev/cli-win32-x64=$VERSION" --workspace packages/cli
       - name: Place binaries into platform package directories
         run: |
           cp nestforge-darwin-arm64/nestforge-darwin-arm64 packages/darwin-arm64/nestforge-darwin-arm64
