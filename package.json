@@ -1,5 +1,8 @@
 {
   "private": true,
+  "version": "0.0.1",
+  "name": "nestforge-cli-npm",
+  "author": "vernonthedev",
   "workspaces": [
     "packages/*"
   ],

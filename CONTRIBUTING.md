@@ -2,7 +2,7 @@
 
 ## Project Structure
 
-```
+```bash
 nestforge-cli-npm/
   packages/
     cli/              # Main nestforge npm package (JS shim)
