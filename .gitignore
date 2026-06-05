@@ -1,0 +1,8 @@
+node_modules/
+dist/
+*.binary
+*.exe
+!packages/**/nestforge-*
+!packages/**/*.exe
+.DS_Store
+*.log
