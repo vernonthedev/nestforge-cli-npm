@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 const path = require('path');
+const { spawn } = require('child_process');
 const { platform, arch } = process;
 
 const PLATFORM_PACKAGES = {
@@ -33,3 +34,6 @@ try {
   console.error(`Failed to resolve binary for ${platform} ${arch}: ${err.message}`);
   process.exit(1);
 }
+
+const args = process.argv.slice(2);
+const child = spawn(binaryPath, args, { stdio: 'inherit' });
