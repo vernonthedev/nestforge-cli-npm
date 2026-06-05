@@ -36,3 +36,8 @@ jobs:
             --dir /tmp/nestforge-binaries
         env:
           GH_TOKEN: ${{ github.token }}
+      - name: Place binaries into platform package directories
+        run: |
+          cp /tmp/nestforge-binaries/nestforge-darwin-arm64 packages/darwin-arm64/nestforge-darwin-arm64
+          cp /tmp/nestforge-binaries/nestforge-linux-x64 packages/linux-x64/nestforge-linux-x64
+          cp /tmp/nestforge-binaries/nestforge-win32-x64.exe packages/win32-x64/nestforge-win32-x64.exe
