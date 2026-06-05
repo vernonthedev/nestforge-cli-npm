@@ -13,3 +13,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: 'https://registry.npmjs.org'
+      - name: Bump versions across all workspaces
+        run: |
+          VERSION="${{ github.event.inputs.version }}"
+          npm pkg set version="$VERSION" --workspace packages/cli
+          npm pkg set version="$VERSION" --workspace packages/darwin-arm64
+          npm pkg set version="$VERSION" --workspace packages/linux-x64
+          npm pkg set version="$VERSION" --workspace packages/win32-x64
+          npm pkg set "optionalDependencies.@nestforge/cli-darwin-arm64=$VERSION" --workspace packages/cli
+          npm pkg set "optionalDependencies.@nestforge/cli-linux-x64=$VERSION" --workspace packages/cli
+          npm pkg set "optionalDependencies.@nestforge/cli-win32-x64=$VERSION" --workspace packages/cli
