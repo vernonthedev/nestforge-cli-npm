@@ -12,6 +12,9 @@
     "nestforge-win32-x64.exe"
   ],
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "engines": {
     "node": ">=18.0.0"
   }
