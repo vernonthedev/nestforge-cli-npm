@@ -45,3 +45,11 @@ jobs:
         run: |
           chmod +x packages/darwin-arm64/nestforge-darwin-arm64
           chmod +x packages/linux-x64/nestforge-linux-x64
+      - name: Publish packages to npm registry
+        run: |
+          npm publish --workspace packages/darwin-arm64
+          npm publish --workspace packages/linux-x64
+          npm publish --workspace packages/win32-x64
+          npm publish --workspace packages/cli
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
