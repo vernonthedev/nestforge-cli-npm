@@ -1,0 +1,15 @@
+{
+  "name": "@nestforge/cli-win32-x64",
+  "version": "0.1.0",
+  "description": "NestForge CLI binary for Windows x86_64",
+  "os": ["win32"],
+  "cpu": ["x64"],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vernonthedev/nestforge-cli.git"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
