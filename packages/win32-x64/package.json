@@ -8,6 +8,9 @@
     "type": "git",
     "url": "git+https://github.com/vernonthedev/nestforge-cli.git"
   },
+  "files": [
+    "nestforge-win32-x64.exe"
+  ],
   "license": "MIT",
   "engines": {
     "node": ">=18.0.0"
