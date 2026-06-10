@@ -14,7 +14,7 @@ npm install -g nestforge-cli
 
 ```bash
 nestforge --help
-nestforge new my-api
+nestforge new my-api-app
 nestforge g module users
 ```
 
